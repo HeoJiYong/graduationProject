@@ -19,6 +19,7 @@ class DHTSensor:
 		if h and t:
 			self.humidity = h
 			self.temperature =t
+			print('실시간 온습도 : ',t,'  ',h)
 		pass
 
 	def getDatas(self):
@@ -33,7 +34,7 @@ def main():
 	testSensor = DHTSensor(howowConfig.dhtPin)
 	while True:
 		testSensor.updateData()
-		습도,온도 = testSensor.getData()
+		습도,온도 = testSensor.getDatas()
 		print("Humidity= ", 습도, "  Temperature= ", 온도)
 		time.sleep(5)
 	pass

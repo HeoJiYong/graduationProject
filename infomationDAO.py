@@ -1,7 +1,10 @@
 '''
 '''
 import pymysql
+from howowConfig import *
+
 class infomationDAO():
+
     #생성자
     def __init__(self,host,user,password,db,charset,port):
         self.conn = pymysql.connect(host=host,
@@ -54,8 +57,6 @@ class infomationDAO():
 
 def main():
     import time
-    from howowConfig import *
-
     testdb = infomationDAO(host,user,password,db,charset,port)
 
     while True:

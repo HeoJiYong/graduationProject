@@ -76,9 +76,9 @@ class infomationDTO():
         return self.humidity
 
     def update(self):
-        print(self.uv,type(self.uv))
-        print(self.humidity,type(self.humidity))
-        print(self.temperature,type(self.temperature))
+        #print(self.uv,type(self.uv))
+        #print(self.humidity,type(self.humidity))
+        #print(self.temperature,type(self.temperature))
         self.dao.update(uv=str(self.uv),humidity=str(self.humidity),temperature=str(self.temperature))
 
     def select(self):

@@ -31,15 +31,11 @@ def sensors(snesorCycle):
         DHT.updateData()
         UV.updateData()
         Timer.updateNow()
-        time.sleep(snesorCycle) #Cycle 주기마다 업데이트
-        #DTO에 저장
-        DTO.setUv(UV.UV)
-        DTO.setHumidity(DHT.humidity)
-        DTO.setTemperature(DHT.temperature)
-    pass
+
+        time.sleep(snesorCycle)  # Cycle 주기마다 업데이트
 
 #알람 시간에 맞춰 led 킨다
-def led():
+def led(ledCycle):
     # (DTO에서 가져온 시간) [비교] (Timer 에서 가져온 시간)
     while True:
         alarmFromDTO = DTO.getAlarm()[-4:] #연, 월, 일, 시,분 에서 시,분 만 가져온다.(ex. 2030)
@@ -47,39 +43,49 @@ def led():
         alarmMinute= alarmFromDTO[2:]   #알람 분 만 추출
         hour,minute = Timer.getNow()    #현재 시,분
         if hour == alarmHour and minute == alarmMinute:
-            print("led on")
             LED.updateColor(DTO.getMood())  #색깔 업데이트 후
             LED.ledOn() #led on
-        pass
-
+        else:
+            LED.ledOff()
+        time.sleep(ledCycle)
     pass
 
 #DB에서 받아오는 함수
 def receiver(Cycle):
     while True:
+        #DTO에 저장
+        DTO.setUv(UV.UV)
+        DTO.setHumidity(DHT.humidity)
+        DTO.setTemperature(DHT.temperature)
+
+        DTO.update()  # DB에 센서값 저장
+        time.sleep(Cycle)
         DTO.select() #DB에서 모든값 가져오기
+        print("DTO- select : ",DTO.getDatas())
         time.sleep(Cycle)
     pass
 
 #DB로 주는 함수
 def sender(Cycle):
     while True:
-        DTO.update() #DB에 센서값 저장
+
         time.sleep(Cycle)
     pass
 
 
 '''메인 함수'''
 def main():
-    theadSensor = threading.Thread(target = sensors,args=howowConfig.sensorCycle)
-    threadLED = threading.Thread(target=led)
-    threadReceiver = threading.Thread(target=receiver, args=howowConfig.dbCycle)
-    threadSender = threading.Thread(target=sender,args = howowConfig.dbCycle)
+    theadSensor = threading.Thread(target = sensors,args=[howowConfig.sensorCycle])
+    threadLED = threading.Thread(target=led,args=[howowConfig.ledCycle])
+    threadReceiver = threading.Thread(target=receiver, args=[howowConfig.dbCycle])
+    threadSender = threading.Thread(target=sender,args = [howowConfig.dbCycle])
 
     theadSensor.start()
     threadLED.start()
     threadReceiver.start()
     threadSender.start()
+    while True:
+        pass
     pass
 
 if __name__ == "__main__":

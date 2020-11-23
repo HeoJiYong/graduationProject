@@ -12,7 +12,7 @@ for i in range(0,pinNumber):
     pixels[i] = [0,0,0]
 pixels.show()
 '''
-on = 255    #너무 밝으면 이 값을 조정 (0~255)
+on = 150    #너무 밝으면 이 값을 조정 (0~255)
 class LED:
     def __init__(self,pinNum,pixelNum):
         '''
@@ -27,8 +27,8 @@ class LED:
         self.pixelNum = pixelNum#led 갯수
         self.pixels=neopixel.NeoPixel(board.D10,pixelNum,brightness=1,auto_write=False) #neopixel 객체생성
         self.rgbIndex = -1      #미리 정의된 led색깔 가르킬 index
-        self.isLedOn = False    #led 꺼졌는지 판별할 변수
-        self.updateColor(0)     #초기 color
+        self.isLedOn = True    #led 꺼졌는지 판별할 변수
+        self.ledOff()
         pass
 
     #무드등 색 업데이트
@@ -37,6 +37,7 @@ class LED:
             for i in range(0,self.pixelNum):    #새로운 색깔로 바꿔준다(LED 갯수만큼)
                 self.pixels[i] = self.colors[rgbIndex]  #pixel 객체에 색깔 적용
             self.rgbIndex = rgbIndex    #현재색깔을 바꿔준다
+        self.isLedOn = False
         pass
 
     #led on
@@ -44,6 +45,7 @@ class LED:
         if not self.isLedOn:
             self.pixels.show()  #켠다
             self.isLedOn = True #켠 상태로 저장
+            print('led On')
         pass
 
     #led off
@@ -52,6 +54,7 @@ class LED:
             self.updateColor(0) #램프색을 0으로 설정
             self.ledOn()        #끈다
             self.isLedOn = False#끈 상태로 저장
+            print('led Off')
         pass
 
 def main():
@@ -61,6 +64,7 @@ def main():
     for i in range(0,8):
         testLED.updateColor(i)
         testLED.ledOn()
+        time.sleep(1)
 
     testLED.ledOff()
     pass
