@@ -37,9 +37,9 @@ class infomationDAO():
         pass
 
     #UV, humidity, temperature 업데이트
-    def update(self,query='update howow set',uv=0,humidity=0.0,temperature=0.0):
+    def update(self,query='update howow set',uv=0,humidity=0.0,temperature=0.0,flower="Hi"):
         curs = self.conn.cursor()
-        sql = query +' uv = '+str(int(uv))+', humidity = '+str(float(humidity))+', temperature = '+str(float(temperature)) + ' where 1'
+        sql = query +' uv = '+str(int(uv))+', humidity = '+str(float(humidity))+', temperature = '+str(float(temperature)) + ', flowerstate = "'+str(flower) +'" where 1'
         print(sql)
         curs.execute(sql)
         self.conn.commit()
@@ -61,6 +61,7 @@ def main():
 
     while True:
         print(testdb.select(lang='kor'))
+        testdb.update()
         time.sleep(1)
         pass
 

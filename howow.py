@@ -16,6 +16,7 @@ import sensorUV         #자외선 센서
 import moodLED          #무드등
 import timer            #현재시간 알기위해(알람기능에서)
 import infomationDTO    #DB업뎃용 (여기서 DAO import함)
+import flowerState
 
 '''객체 정의'''
 DHT = sensorDHT.DHTSensor(howowConfig.dhtPin)
@@ -23,6 +24,7 @@ UV = sensorUV.UVSensor(howowConfig.uvPin)
 LED = moodLED.LED(howowConfig.ledPin,howowConfig.ledNum)
 Timer = timer.timer()
 DTO = infomationDTO.infomationDTO()
+Flower=flowerState.flowerState()
 
 '''스레드 함수 정의'''
 #센서값(온도 습도 UV), 시간 업데이트
@@ -31,6 +33,7 @@ def sensors(snesorCycle):
         DHT.updateData()
         UV.updateData()
         Timer.updateNow()
+        Flower.updateFlowerState(DHT.temperature,DHT.humidity,UV.UV)
 
         time.sleep(snesorCycle)  # Cycle 주기마다 업데이트
 
@@ -57,8 +60,9 @@ def receiver(Cycle):
         DTO.setUv(UV.UV)
         DTO.setHumidity(DHT.humidity)
         DTO.setTemperature(DHT.temperature)
-
+        DTO.setFlower(Flower.getFlowerState())
         DTO.update()  # DB에 센서값 저장
+
         time.sleep(Cycle)
         DTO.select() #DB에서 모든값 가져오기
         print("DTO- select : ",DTO.getDatas())

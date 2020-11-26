@@ -29,6 +29,7 @@ class infomationDTO():
         self.uv = 0
         self.temperature = 0.0
         self.humidity = 0.0
+        self.flower = 'No flower State'
         pass
 
     def setUserinfo(self, userinfo):
@@ -51,6 +52,9 @@ class infomationDTO():
 
     def setHumidity(self, humidity):
         self.humidity = humidity
+
+    def setFlower(self,flower):
+        self.flower = flower
 
     #-------------------
 
@@ -75,11 +79,14 @@ class infomationDTO():
     def getHumidity(self):
         return self.humidity
 
+    def getFlower(self):
+        return self.flower
+
     def update(self):
         #print(self.uv,type(self.uv))
         #print(self.humidity,type(self.humidity))
         #print(self.temperature,type(self.temperature))
-        self.dao.update(uv=str(self.uv),humidity=str(self.humidity),temperature=str(self.temperature))
+        self.dao.update(uv=str(self.uv),humidity=str(self.humidity),temperature=str(self.temperature),flower=self.flower)
 
     def select(self):
         rows = self.dao.select()
